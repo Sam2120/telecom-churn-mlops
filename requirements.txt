@@ -14,9 +14,8 @@ plotly==5.15.0
 
 # MLOps & Experiment Tracking
 mlflow==2.6.0
-dvc==3.15.0
-dvc-s3==2.23.0
-pathspec<0.12.0  # DVC compatibility
+# DVC is installed separately in CI to avoid version conflicts
+# pathspec<0.12.0  # Only needed if DVC is installed
 
 # API & Web
 fastapi==0.101.0
