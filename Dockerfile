@@ -29,7 +29,6 @@ WORKDIR /app
 COPY src/ ./src/
 COPY api/ ./api/
 COPY models/ ./models/
-COPY configs/ ./configs/
 
 # Copy DVC configuration
 COPY .dvc/ ./.dvc/
