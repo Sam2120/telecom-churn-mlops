@@ -82,9 +82,9 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
-    - name: Install DVC
+    - name: Install DVC and dependencies
       run: |
-        pip install dvc dvc-s3
+        pip install dvc dvc-s3 -r requirements.txt
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
