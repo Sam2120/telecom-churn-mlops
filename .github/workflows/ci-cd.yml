@@ -14,8 +14,8 @@ on:
 
 env:
   PYTHON_VERSION: '3.10'
-  AWS_REGION: us-east-1
-  MLFLOW_TRACKING_URI: http://localhost:5000
+  AWS_REGION: us-east-2
+  MLFLOW_TRACKING_URI: file:./mlruns
 
 jobs:
   # Stage 1: Code Quality and Tests
