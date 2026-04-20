@@ -30,7 +30,7 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
     
     - name: Cache pip packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -65,7 +65,7 @@ jobs:
         pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         files: ./coverage.xml
         fail_ci_if_error: false
@@ -106,7 +106,7 @@ jobs:
         dvc status
     
     - name: Upload DVC metrics
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dvc-metrics
         path: |
@@ -141,7 +141,7 @@ jobs:
         MLFLOW_TRACKING_URI: ${{ env.MLFLOW_TRACKING_URI }}
     
     - name: Upload MLflow artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mlflow-artifacts
         path: |
@@ -288,7 +288,7 @@ jobs:
         python -m pydoc -w api.main > docs/generated/api.html || true
     
     - name: Upload documentation
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: documentation
         path: docs/
