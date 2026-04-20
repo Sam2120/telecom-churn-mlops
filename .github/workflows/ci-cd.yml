@@ -134,7 +134,21 @@ jobs:
     
     - name: Install dependencies
       run: |
+        pip install "pathspec<0.12"
+        pip install "dvc[s3]==3.49.0"
         pip install -r requirements.txt
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Pull DVC data
+      run: |
+        dvc pull || echo "DVC pull failed, will run pipeline"
+        dvc repro
     
     - name: Start MLflow server
       run: |
