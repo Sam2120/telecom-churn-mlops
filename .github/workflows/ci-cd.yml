@@ -281,6 +281,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
     - name: Generate API documentation
       run: |
         pip install -r requirements.txt
