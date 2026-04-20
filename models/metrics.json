@@ -1,0 +1,77 @@
+{
+  "logistic_regression": {
+    "train_accuracy": 0.9250249916694435,
+    "train_precision": 0.5367686527106817,
+    "train_recall": 0.9643201542912246,
+    "train_f1": 0.6896551724137931,
+    "train_auc": 0.9761647746782031,
+    "test_accuracy": 0.9238713976345161,
+    "test_precision": 0.53276955602537,
+    "test_recall": 0.9710982658959537,
+    "test_f1": 0.6880546075085324,
+    "test_auc": 0.976139731768297,
+    "test_average_precision": 0.7414580803188765,
+    "confusion_matrix": [
+      [
+        5042,
+        442
+      ],
+      [
+        15,
+        504
+      ]
+    ],
+    "cv_auc_mean": 0.9754441957090588,
+    "cv_auc_std": 0.0013559495880589392
+  },
+  "random_forest": {
+    "train_accuracy": 0.9481006331222925,
+    "train_precision": 0.6276202219482121,
+    "train_recall": 0.9816779170684667,
+    "train_f1": 0.7657013915005642,
+    "train_auc": 0.9914631243603695,
+    "test_accuracy": 0.92103948025987,
+    "test_precision": 0.5263157894736842,
+    "test_recall": 0.8670520231213873,
+    "test_f1": 0.6550218340611353,
+    "test_auc": 0.9664165784787835,
+    "test_average_precision": 0.7224599044720694,
+    "confusion_matrix": [
+      [
+        5079,
+        405
+      ],
+      [
+        69,
+        450
+      ]
+    ],
+    "cv_auc_mean": 0.9617499259657855,
+    "cv_auc_std": 0.0021158312741934252
+  },
+  "gradient_boosting": {
+    "train_accuracy": 0.9680106631122959,
+    "train_precision": 0.7443862275449101,
+    "train_recall": 0.9590163934426229,
+    "train_f1": 0.8381795195954487,
+    "train_auc": 0.994429483769974,
+    "test_accuracy": 0.9446943195069132,
+    "test_precision": 0.6307692307692307,
+    "test_recall": 0.8689788053949904,
+    "test_f1": 0.7309562398703403,
+    "test_auc": 0.9775841157812042,
+    "test_average_precision": 0.7973219208224099,
+    "confusion_matrix": [
+      [
+        5220,
+        264
+      ],
+      [
+        68,
+        451
+      ]
+    ],
+    "cv_auc_mean": 0.9740242364401066,
+    "cv_auc_std": 0.0015533867456785089
+  }
+}

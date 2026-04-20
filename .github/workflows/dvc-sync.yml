@@ -1,0 +1,60 @@
+name: DVC Data Sync
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install DVC
+      run: |
+        pip install dvc dvc-s3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Fetch new data from S3
+      run: |
+        # Check for new data in S3
+        aws s3 sync s3://telecom-churn-bucket/incoming/ data/incoming/ || true
+    
+    - name: Process new data
+      run: |
+        # Process any new data files
+        python scripts/process_new_data.py || echo "No new data to process"
+    
+    - name: Update DVC tracking
+      run: |
+        dvc add data/raw/telecom_data.csv
+        dvc push
+    
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/raw/*.dvc .dvc/config
+        git commit -m "Update data tracking: $(date -u +%Y-%m-%d-%H:%M)" || echo "No changes to commit"
+    
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}

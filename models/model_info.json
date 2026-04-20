@@ -1,0 +1,36 @@
+{
+  "model_type": "gradient_boosting",
+  "version": "1.0.0",
+  "metrics": {
+    "train_accuracy": 0.9680106631122959,
+    "train_precision": 0.7443862275449101,
+    "train_recall": 0.9590163934426229,
+    "train_f1": 0.8381795195954487,
+    "train_auc": 0.994429483769974,
+    "test_accuracy": 0.9446943195069132,
+    "test_precision": 0.6307692307692307,
+    "test_recall": 0.8689788053949904,
+    "test_f1": 0.7309562398703403,
+    "test_auc": 0.9775841157812042,
+    "test_average_precision": 0.7973219208224099,
+    "confusion_matrix": [
+      [
+        5220,
+        264
+      ],
+      [
+        68,
+        451
+      ]
+    ],
+    "cv_auc_mean": 0.9740242364401066,
+    "cv_auc_std": 0.0015533867456785089
+  },
+  "feature_count": 194,
+  "pca_components": 28,
+  "last_updated": "2026-04-20T16:06:26.136084",
+  "config": {
+    "apply_pca": true,
+    "use_smote": true
+  }
+}

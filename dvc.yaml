@@ -1,0 +1,87 @@
+stages:
+  load_data:
+    cmd: python scripts/load_data.py
+    deps:
+      - scripts/load_data.py
+      - src/data_loader.py
+      - src/config.py
+    outs:
+      - data/interim/raw_data.csv:
+          cache: true
+          persist: false
+  
+  preprocess:
+    cmd: python scripts/preprocess.py
+    deps:
+      - scripts/preprocess.py
+      - src/feature_engineering.py
+      - src/config.py
+      - data/interim/raw_data.csv
+    outs:
+      - data/processed/features.csv:
+          cache: true
+          persist: false
+      - data/processed/target.csv:
+          cache: true
+          persist: false
+      - models/preprocessor.pkl:
+          cache: true
+          persist: false
+  
+  split_data:
+    cmd: python scripts/split_data.py
+    deps:
+      - scripts/split_data.py
+      - data/processed/features.csv
+      - data/processed/target.csv
+    outs:
+      - data/processed/X_train.csv:
+          cache: true
+          persist: false
+      - data/processed/X_test.csv:
+          cache: true
+          persist: false
+      - data/processed/y_train.csv:
+          cache: true
+          persist: false
+      - data/processed/y_test.csv:
+          cache: true
+          persist: false
+  
+  train_models:
+    cmd: python scripts/train_models.py
+    deps:
+      - scripts/train_models.py
+      - src/models.py
+      - src/config.py
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+    outs:
+      - models/churn_model.pkl:
+          cache: true
+          persist: false
+      - models/interpretable_model.pkl:
+          cache: true
+          persist: false
+      - models/pca_model.pkl:
+          cache: true
+          persist: false
+    metrics:
+      - models/metrics.json:
+          cache: false
+          persist: true
+  
+  evaluate:
+    cmd: python scripts/evaluate.py
+    deps:
+      - scripts/evaluate.py
+      - models/churn_model.pkl
+      - models/interpretable_model.pkl
+      - data/processed/X_test.csv
+      - data/processed/y_test.csv
+    outs:
+      - artifacts/evaluation_report.json:
+          cache: false
+          persist: true

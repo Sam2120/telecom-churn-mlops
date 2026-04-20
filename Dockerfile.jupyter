@@ -1,0 +1,24 @@
+FROM jupyter/scipy-notebook:latest
+
+USER root
+
+# Install additional dependencies
+COPY requirements.txt /tmp/
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Install DVC
+RUN pip install dvc dvc-s3
+
+# Set up working directory
+WORKDIR /home/jovyan
+
+# Fix permissions
+RUN fix-permissions /home/jovyan
+
+USER $NB_UID
+
+# Expose Jupyter port
+EXPOSE 8888
+
+# Start Jupyter Lab
+CMD ["start-notebook.sh", "--LabApp.token=''"]
