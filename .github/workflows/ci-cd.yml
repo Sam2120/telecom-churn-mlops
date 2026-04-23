@@ -86,9 +86,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-v2-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-
+          ${{ runner.os }}-pip-v2-
     
     - name: Cache DVC files
       uses: actions/cache@v4
@@ -98,10 +98,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dvc-
     
-    - name: Install DVC and dependencies
+    - name: Install dependencies
       run: |
         pip install "pathspec<0.12"
-        pip install "dvc[s3]==3.49.0"
         pip install -r requirements.txt
     
     - name: Configure AWS credentials
@@ -152,9 +151,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-v2-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-
+          ${{ runner.os }}-pip-v2-
     
     - name: Cache DVC files
       uses: actions/cache@v4
@@ -167,7 +166,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install "pathspec<0.12"
-        pip install "dvc[s3]==3.49.0"
         pip install -r requirements.txt
     
     - name: Configure AWS credentials
