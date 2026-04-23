@@ -98,9 +98,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dvc-
     
-    - name: Install dependencies
+    - name: Install DVC and dependencies
       run: |
         pip install "pathspec<0.12"
+        pip install "dvc[s3]==3.49.0"
         pip install -r requirements.txt
     
     - name: Configure AWS credentials
@@ -163,9 +164,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dvc-
     
-    - name: Install dependencies
+    - name: Install DVC and dependencies
       run: |
         pip install "pathspec<0.12"
+        pip install "dvc[s3]==3.49.0"
         pip install -r requirements.txt
     
     - name: Configure AWS credentials
