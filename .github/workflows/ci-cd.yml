@@ -82,6 +82,22 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Cache DVC files
+      uses: actions/cache@v4
+      with:
+        path: .dvc/cache
+        key: ${{ runner.os }}-dvc-${{ hashFiles('**/*.dvc') }}
+        restore-keys: |
+          ${{ runner.os }}-dvc-
+    
     - name: Install DVC and dependencies
       run: |
         pip install "pathspec<0.12"
@@ -131,6 +147,22 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Cache DVC files
+      uses: actions/cache@v4
+      with:
+        path: .dvc/cache
+        key: ${{ runner.os }}-dvc-${{ hashFiles('**/*.dvc') }}
+        restore-keys: |
+          ${{ runner.os }}-dvc-
     
     - name: Install dependencies
       run: |
@@ -192,26 +224,28 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
     
     - name: Build and push Docker image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: telecom-churn-api
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/telecom-churn-api:${{ github.sha }}
+          ${{ steps.login-ecr.outputs.registry }}/telecom-churn-api:latest
+        cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/telecom-churn-api:cache
+        cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/telecom-churn-api:cache,mode=max
     
     - name: Build and push Jupyter image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: telecom-churn-jupyter
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -f Dockerfile.jupyter -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.jupyter
+        push: true
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/telecom-churn-jupyter:${{ github.sha }}
+          ${{ steps.login-ecr.outputs.registry }}/telecom-churn-jupyter:latest
+        cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/telecom-churn-jupyter:cache
+        cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/telecom-churn-jupyter:cache,mode=max
 
   # Stage 5: Deploy to Staging
   deploy-staging:
@@ -302,6 +336,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
     
     - name: Generate API documentation
       run: |
