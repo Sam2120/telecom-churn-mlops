@@ -115,15 +115,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
     
     - name: Pull DVC data
-      run: |
-        dvc pull || echo "DVC pull failed, will use sample data"
-    
-    - name: Generate sample data if needed
-      run: |
-        if [ ! -f "data/raw/telecom_data.csv" ]; then
-          echo "Real data not found, generating sample data..."
-          python scripts/generate_sample_data.py
-        fi
+      run: dvc pull
     
     - name: Start MLflow server
       run: |
@@ -191,15 +183,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
     
     - name: Pull DVC data
-      run: |
-        dvc pull || echo "DVC pull failed, will run pipeline"
-    
-    - name: Generate sample data if needed
-      run: |
-        if [ ! -f "data/raw/telecom_data.csv" ]; then
-          echo "Real data not found, generating sample data..."
-          python scripts/generate_sample_data.py
-        fi
+      run: dvc pull
     
     - name: Run DVC pipeline
       run: dvc repro

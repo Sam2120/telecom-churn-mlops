@@ -263,14 +263,29 @@ class DataLoader:
                 
                 df["churned"] = conditions.astype(int)
             else:
-                logger.warning(f"Missing call columns for month {churn_month}, using available data")
-                # Use whatever columns are available
-                usage_cols = [col for col in df.columns if col.endswith(f"_{churn_month}") 
-                             and any(keyword in col for keyword in ["mou", "og", "ic", "vol"])]
-                if usage_cols:
-                    df["churned"] = (df[usage_cols].sum(axis=1) == 0).astype(int)
+                logger.warning(f"Missing standard call columns for month {churn_month}, using available data")
+                # Try sample data column names: incoming_calls_m9, outgoing_calls_m9, data_usage_m9
+                incoming_candidates = [f"incoming_calls_m{churn_month}", f"incoming_{churn_month}"]
+                outgoing_candidates = [f"outgoing_calls_m{churn_month}", f"outgoing_{churn_month}"]
+                data_candidates = [f"data_usage_m{churn_month}", f"data_{churn_month}"]
+                
+                inc_col = next((c for c in incoming_candidates if c in df.columns), None)
+                out_col = next((c for c in outgoing_candidates if c in df.columns), None)
+                data_col = next((c for c in data_candidates if c in df.columns), None)
+                
+                if inc_col and out_col:
+                    conditions = (df[inc_col] == 0) & (df[out_col] == 0)
+                    if data_col:
+                        conditions &= (df[data_col] == 0)
+                    df["churned"] = conditions.astype(int)
                 else:
-                    raise ValueError(f"Cannot define churn: no usage columns found for month {churn_month}")
+                    # Fallback: use any columns ending with month number
+                    usage_cols = [col for col in df.columns if col.endswith(f"_{churn_month}") 
+                                 and any(keyword in col.lower() for keyword in ["call", "usage", "data", "mou", "og", "ic", "vol", "recharge", "amt"])]
+                    if usage_cols:
+                        df["churned"] = (df[usage_cols].sum(axis=1) == 0).astype(int)
+                    else:
+                        raise ValueError(f"Cannot define churn: no usage columns found for month {churn_month}")
         else:
             # Long format: original logic
             churn_data = df[df["month"] == churn_month].copy()
