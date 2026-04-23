@@ -118,6 +118,13 @@ jobs:
       run: |
         dvc pull || echo "DVC pull failed, will use sample data"
     
+    - name: Generate sample data if needed
+      run: |
+        if [ ! -f "data/raw/telecom_data.csv" ]; then
+          echo "Real data not found, generating sample data..."
+          python scripts/generate_sample_data.py
+        fi
+    
     - name: Start MLflow server
       run: |
         mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 0.0.0.0 --port 5000 &
@@ -186,7 +193,16 @@ jobs:
     - name: Pull DVC data
       run: |
         dvc pull || echo "DVC pull failed, will run pipeline"
-        dvc repro
+    
+    - name: Generate sample data if needed
+      run: |
+        if [ ! -f "data/raw/telecom_data.csv" ]; then
+          echo "Real data not found, generating sample data..."
+          python scripts/generate_sample_data.py
+        fi
+    
+    - name: Run DVC pipeline
+      run: dvc repro
     
     - name: Start MLflow server
       run: |
