@@ -86,9 +86,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-v2-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-v3-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-v2-
+          ${{ runner.os }}-pip-v3-
     
     - name: Cache DVC files
       uses: actions/cache@v4
@@ -98,11 +98,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dvc-
     
-    - name: Install DVC and dependencies
-      run: |
-        pip install "pathspec<0.12"
-        pip install "dvc[s3]==3.49.0"
-        pip install -r requirements.txt
+    - name: Install pathspec (DVC dependency)
+      run: pip install "pathspec<0.12"
+    
+    - name: Install DVC
+      run: pip install "dvc[s3]==3.49.0"
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -152,9 +155,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-v2-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-v3-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-v2-
+          ${{ runner.os }}-pip-v3-
     
     - name: Cache DVC files
       uses: actions/cache@v4
@@ -164,11 +167,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dvc-
     
-    - name: Install DVC and dependencies
-      run: |
-        pip install "pathspec<0.12"
-        pip install "dvc[s3]==3.49.0"
-        pip install -r requirements.txt
+    - name: Install pathspec (DVC dependency)
+      run: pip install "pathspec<0.12"
+    
+    - name: Install DVC
+      run: pip install "dvc[s3]==3.49.0"
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
