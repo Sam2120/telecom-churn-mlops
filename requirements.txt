@@ -30,7 +30,8 @@ datasets==2.14.4
 
 # Cloud & Storage
 boto3>=1.29.0
-s3fs>=2023.12.0
+s3fs==2023.12.2
+fsspec==2023.12.2
 
 # Containerization
 docker==6.1.3
