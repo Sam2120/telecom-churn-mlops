@@ -36,7 +36,7 @@ MLFLOW_EXPERIMENT_NAME = os.getenv("MLFLOW_EXPERIMENT_NAME", "telecom_churn_pred
 
 # Hugging Face Configuration
 HF_TOKEN = os.getenv("HF_TOKEN")
-HF_MODEL_REPO = os.getenv("HF_MODEL_REPO", "telecom-churn-model")
+HF_MODEL_REPO = os.getenv("HF_MODEL_REPO", "Sam212000/telecom-churn-model")
 
 # Model Configuration
 RANDOM_STATE = 42
