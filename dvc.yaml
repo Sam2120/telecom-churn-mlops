@@ -5,6 +5,7 @@ stages:
       - scripts/load_data.py
       - src/data_loader.py
       - src/config.py
+      - data/raw/telecom_data.csv
     outs:
       - data/interim/raw_data.csv:
           cache: true
